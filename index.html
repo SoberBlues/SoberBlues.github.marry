@@ -182,15 +182,15 @@
 
   .table.aisle-space { width: 35px; border: none; background: transparent; pointer-events: none; }
 
-  /* 查詢高亮標記：不放大、不碰觸別人，改用超強烈發光與金黃色漸層來突顯 */
+  /* 查詢高亮標記：改為藍色 #3b82f6，不放大、不碰觸別人 */
   .table.highlight { 
-    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%) !important; 
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%) !important; 
     color: white !important; 
     border-width: 3.5px !important;
     border-style: solid !important;
     border-color: #ffffff !important;
     transform: none !important; /* 確保絕對不放大 */
-    box-shadow: 0 0 20px rgba(251, 191, 36, 0.95), 0 0 8px rgba(0, 0, 0, 0.25) !important; 
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.95), 0 0 8px rgba(0, 0, 0, 0.25) !important; 
     z-index: 20; 
   }
 
@@ -277,7 +277,7 @@
       <div class="legend-item"><div class="legend-dot" style="background:#ff6b81;"></div>主桌</div>
       <div class="legend-item"><div class="legend-dot" style="background:#7c3aed;"></div>貴賓</div>
       <div class="legend-item"><div class="legend-dot" style="background:#fff; border:1.5px solid #cbd5e1;"></div>嘉賓</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div>查詢定位</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#3b82f6;"></div>查詢定位</div>
     </div>
   </div>
 
