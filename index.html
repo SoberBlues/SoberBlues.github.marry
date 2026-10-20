@@ -268,7 +268,7 @@
     <div class="seating-wrapper">
       <div class="seating" id="seatingLayout"></div>
     </div>
-    <div style="text-align: center; color: #94a3b8; font-size: 11px; margin-top: 5px;">左右滑動查看全區 ↔️</div>
+    <div style="text-align: center; color: #94a3b8; font-size: 11px; margin-top: 5px;">左右滑動查看全区 ↔️</div>
     
     <div class="legend-box">
       <div class="legend-item"><div class="legend-dot" style="background:#ff8da1;"></div>主桌</div>
@@ -322,11 +322,20 @@ function searchGuest() {
   if (!query) return;
   document.getElementById('searchInput').blur();
   
-  const results = quests.filter(q => 
-    q.name.toUpperCase().includes(query) || 
-    q.table.toUpperCase().includes(query) ||
-    ( /^\d+$/.test(query) && q.table === query.padStart(2, '0'))
-  );
+  // 針對 01~09 的單一數字（如打 1~9）自動補齊成 01~09
+  let tableQuery = query;
+  const singleDigitMatch = query.match(/^([1-9])$/);
+  if (singleDigitMatch) {
+    tableQuery = '0' + singleDigitMatch[1];
+  }
+
+  const results = quests.filter(q => {
+    const qTable = q.table.toUpperCase();
+    // 判斷是否符合：名稱包含、一般桌號比對（支援 01~09 的自動補齊或完整比對）、或其他完整文字桌號
+    const isNameMatch = q.name.toUpperCase().includes(query);
+    const isTableMatch = qTable === tableQuery || qTable === query;
+    return isNameMatch || isTableMatch;
+  });
 
   const container = document.getElementById('resultContainer');
   if (results.length === 0) {
@@ -336,7 +345,7 @@ function searchGuest() {
     const q = results[0];
     const badgeClass = q.table.includes('主桌') ? 'main' : (q.table.includes('貴賓') ? 'vip' : 'normal');
     container.innerHTML = `
-      <div style="background: #f8fafc; border-radius: 16px; padding: 14px; border: 1px solid #e2e8f0;">
+      <div style="background: #f8fafc; border-radius: 16px; padding: 14px; border: 1.5px solid #e2e8f0;">
         <div style="display:flex; justify-content:space-between; align-items:flex-start;">
           <div>
             <b style="font-size:18px; color:#1e293b;">${q.name}</b> 
@@ -388,7 +397,7 @@ function highlightTables(targetTables) {
         div.className = 'table' + typeClass;
         div.textContent = tableId;
         
-        if (targetTables.includes(tableId) || ( /^\d+$/.test(tableId) && targetTables.includes(String(parseInt(tableId))))) {
+        if (targetTables.includes(tableId) || targetTables.includes(String(parseInt(tableId)))) {
           div.classList.add('highlight');
           setTimeout(() => div.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }), 150);
         }
