@@ -163,9 +163,9 @@
     width: 60px; 
     height: 60px; 
     font-size: 13px;
-    border: none;
-    background: radial-gradient(circle at 60% 30%, #ffb6c1 0%, #ff8da1 100%);
-    box-shadow: 0 4px 15px rgba(255, 141, 161, 0.4);
+    border: 2px solid #f43f5e;
+    background: radial-gradient(circle at 60% 30%, #ffb6c1 0%, #ff6b81 100%);
+    box-shadow: 0 4px 18px rgba(244, 63, 94, 0.5);
     color: #ffffff;
   }
   
@@ -174,21 +174,24 @@
     width: 55px; 
     height: 55px; 
     font-size: 12px;
-    border: none;
-    background: radial-gradient(circle at 50% 30%, #c4b5fd 0%, #8b5cf6 100%);
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    border: 2px solid #8b5cf6;
+    background: radial-gradient(circle at 50% 30%, #d8b4fe 0%, #7c3aed 100%);
+    box-shadow: 0 4px 18px rgba(139, 92, 246, 0.5);
     color: #ffffff;
   }
 
   .table.aisle-space { width: 35px; border: none; background: transparent; pointer-events: none; }
 
-  /* 查詢高亮標記 */
+  /* 查詢高亮標記（升級版：超顯眼金黃色光暈、外框、放大） */
   .table.highlight { 
-    background: #f59e0b !important; color: white !important; 
-    border-color: #d97706 !important;
-    transform: scale(1.15); 
-    box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); 
-    z-index: 5; 
+    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%) !important; 
+    color: white !important; 
+    border-width: 3px !important;
+    border-style: solid !important;
+    border-color: #fff !important;
+    transform: scale(1.25); 
+    box-shadow: 0 0 25px rgba(251, 191, 36, 0.9), 0 0 10px rgba(0, 0, 0, 0.2) !important; 
+    z-index: 10; 
   }
 
   .badge { padding: 4px 10px; border-radius: 6px; color: white; font-size: 12px; font-weight: bold; }
@@ -268,11 +271,11 @@
     <div class="seating-wrapper">
       <div class="seating" id="seatingLayout"></div>
     </div>
-    <div style="text-align: center; color: #94a3b8; font-size: 11px; margin-top: 5px;">左右滑動查看全区 ↔️</div>
+    <div style="text-align: center; color: #94a3b8; font-size: 11px; margin-top: 5px;">左右滑動查看全區 ↔️</div>
     
     <div class="legend-box">
-      <div class="legend-item"><div class="legend-dot" style="background:#ff8da1;"></div>主桌</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6;"></div>貴賓</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ff6b81;"></div>主桌</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7c3aed;"></div>貴賓</div>
       <div class="legend-item"><div class="legend-dot" style="background:#fff; border:1.5px solid #cbd5e1;"></div>嘉賓</div>
       <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div>查詢定位</div>
     </div>
@@ -322,16 +325,16 @@ function searchGuest() {
   if (!query) return;
   document.getElementById('searchInput').blur();
   
-  // 針對 01~09 的單一數字（如打 1~9）自動補齊成 01~09
+  // 定義允許單一數字簡寫的清單：01, 02, 04, 05, 06, 07, 08, 09 (不包含 03)
+  const allowedSingleDigits = ['1', '2', '4', '5', '6', '7', '8', '9'];
   let tableQuery = query;
-  const singleDigitMatch = query.match(/^([1-9])$/);
-  if (singleDigitMatch) {
-    tableQuery = '0' + singleDigitMatch[1];
+  
+  if (allowedSingleDigits.includes(query)) {
+    tableQuery = '0' + query;
   }
 
   const results = quests.filter(q => {
     const qTable = q.table.toUpperCase();
-    // 判斷是否符合：名稱包含、一般桌號比對（支援 01~09 的自動補齊或完整比對）、或其他完整文字桌號
     const isNameMatch = q.name.toUpperCase().includes(query);
     const isTableMatch = qTable === tableQuery || qTable === query;
     return isNameMatch || isTableMatch;
