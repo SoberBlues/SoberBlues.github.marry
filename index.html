@@ -147,8 +147,7 @@
     padding: 5px;
   }
 
-  /* 增加列與座位間距，確保放大時絕對不會碰到別人 */
-  .row { display: flex; gap: 14px; margin-bottom: 12px; align-items: center; justify-content: center; }
+  .row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; justify-content: center; }
 
   /* 座位圓圈樣式 */
   .table { 
@@ -156,7 +155,7 @@
     border-radius: 50%; border: 1.5px solid #e2e8f0; background: #ffffff; 
     font-size: 12px; font-weight: bold; color: #475569; 
     text-align: center; position: relative;
-    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.2s ease;
   }
 
   /* 特殊桌型配色：主桌粉紅漸層 */
@@ -183,27 +182,16 @@
 
   .table.aisle-space { width: 35px; border: none; background: transparent; pointer-events: none; }
 
-  /* 查詢高亮標記（適度放大且透過間距控制不碰觸相鄰桌） */
+  /* 查詢高亮標記：不放大、不碰觸別人，改用超強烈發光與金黃色漸層來突顯 */
   .table.highlight { 
     background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%) !important; 
     color: white !important; 
-    border-width: 3px !important;
+    border-width: 3.5px !important;
     border-style: solid !important;
-    border-color: #fff !important;
-    transform: scale(1.18) !important; 
-    box-shadow: 0 0 22px rgba(251, 191, 36, 0.9), 0 4px 12px rgba(0, 0, 0, 0.2) !important; 
+    border-color: #ffffff !important;
+    transform: none !important; /* 確保絕對不放大 */
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.95), 0 0 8px rgba(0, 0, 0, 0.25) !important; 
     z-index: 20; 
-  }
-
-  /* 針對主桌與貴賓桌被高亮時的尺寸微調 */
-  .table.main.highlight {
-    width: 60px !important;
-    height: 60px !important;
-  }
-
-  .table.vip.highlight {
-    width: 55px !important;
-    height: 55px !important;
   }
 
   .badge { padding: 4px 10px; border-radius: 6px; color: white; font-size: 12px; font-weight: bold; }
@@ -337,7 +325,7 @@ function searchGuest() {
   if (!query) return;
   document.getElementById('searchInput').blur();
   
-  // 定義允許單一數字簡寫的清單：01, 02, 04, 05, 06, 07, 08, 09 (不包含 03)
+  // 針對 01、02、04~09：打單一數字（如 1）自動補齊為 01
   const allowedSingleDigits = ['1', '2', '4', '5', '6', '7', '8', '9'];
   let tableQuery = query;
   
